@@ -64,15 +64,16 @@ jobs:
         aws-region: ${{ env.AWS_REGION }}
 
     - name: Login to Amazon ECR
-      id: login-ecr
-      uses: aws-actions/amazon-ecr-login@v1
+      id: login-ecr-public
+      uses: aws-actions/amazon-ecr-login@v2
       with:
           registry-type: public
+          mask-password: 'false'
 
-    - name: Build, tag, and push image to Amazon ECR
+    - name: Build, tag, and push image to Amazon ECR Public
       id: build-image
       env:
-        ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+        ECR_REGISTRY: ${{ steps.login-ecr-public.outputs.registry }}
         REGISTRY_ALIAS: ${{ env.REGISTRY_ALIAS }}
         IMAGE_TAG: ${{ github.sha }}
       run: |
