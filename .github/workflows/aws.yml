@@ -49,7 +49,7 @@ jobs:
   deploy:
     # name: Deploy
     name: Push
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
     environment: production
 
     steps:
