@@ -25,6 +25,9 @@
 #    and best practices on handling the access key credentials.
 
 # name: Deploy to Amazon ECS
+
+# Disabled due to the environment differences between GitHub Actions (amd64) and Amazon EC2 (arm64/v8)
+
 name: Push to Amazon ECR
 
 on:
@@ -49,7 +52,7 @@ jobs:
   deploy:
     # name: Deploy
     name: Push
-    runs-on: macos-latest
+    runs-on: ubuntu-latest
     environment: production
 
     steps:
