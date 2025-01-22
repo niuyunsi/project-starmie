@@ -1,7 +1,7 @@
 export async function fetchPeopleById(id: string) {
   try {
     console.log("fetchPeopleById", id);
-    await new Promise((resolve) => setTimeout(resolve, 3000));
+    // await new Promise((resolve) => setTimeout(resolve, 3000));
 
     const res = await fetch(`https://swapi.dev/api/people/${id}/`);
     const data = await res.json();
@@ -16,7 +16,7 @@ export async function fetchPeopleById(id: string) {
 export async function fetchPlanetById(id: string) {
   try {
     console.log("fetchPlanetById", id);
-    await new Promise((resolve) => setTimeout(resolve, 1000));
+    // await new Promise((resolve) => setTimeout(resolve, 1000));
 
     const res = await fetch(`https://swapi.dev/api/planets/${id}/`);
     const data = await res.json();
