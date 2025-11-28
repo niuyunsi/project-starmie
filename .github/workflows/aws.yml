@@ -57,6 +57,10 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v4
 
+    - name: Get package version
+      id: package-version
+      run: echo "VERSION=$(jq -r .version package.json)" >> $GITHUB_OUTPUT
+
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v1
       with:
@@ -76,12 +80,14 @@ jobs:
         ECR_REGISTRY: ${{ steps.login-ecr-public.outputs.registry }}
         REGISTRY_ALIAS: ${{ env.REGISTRY_ALIAS }}
         IMAGE_TAG: ${{ github.sha }}
+        VERSION: ${{ steps.package-version.outputs.VERSION }}
       run: |
         # Build a docker container and
         # push it to ECR so that it can
         # be deployed to ECS.
-        docker build -t $ECR_REGISTRY/$REGISTRY_ALIAS/$ECR_REPOSITORY:$IMAGE_TAG -t $ECR_REGISTRY/$REGISTRY_ALIAS/$ECR_REPOSITORY:latest .
+        docker build -t $ECR_REGISTRY/$REGISTRY_ALIAS/$ECR_REPOSITORY:$IMAGE_TAG -t $ECR_REGISTRY/$REGISTRY_ALIAS/$ECR_REPOSITORY:$VERSION -t $ECR_REGISTRY/$REGISTRY_ALIAS/$ECR_REPOSITORY:latest .
         docker push $ECR_REGISTRY/$REGISTRY_ALIAS/$ECR_REPOSITORY:$IMAGE_TAG
+        docker push $ECR_REGISTRY/$REGISTRY_ALIAS/$ECR_REPOSITORY:$VERSION
         docker push $ECR_REGISTRY/$REGISTRY_ALIAS/$ECR_REPOSITORY:latest
         echo "image=$ECR_REGISTRY/$REGISTRY_ALIAS/$ECR_REPOSITORY:$IMAGE_TAG" >> $GITHUB_OUTPUT
         echo "image=$ECR_REGISTRY/$REGISTRY_ALIAS/$ECR_REPOSITORY:latest" >> $GITHUB_OUTPUT
